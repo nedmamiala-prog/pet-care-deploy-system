@@ -6,14 +6,27 @@ require('./config/schemaMigrations');
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
+// Configure CORS origins from environment variable `FRONTEND_URLS` (comma-separated)
+const frontendUrlsEnv = process.env.FRONTEND_URLS || '';
+const frontendUrls = frontendUrlsEnv.split(',').map(u => u.trim()).filter(Boolean);
+const defaultAllowed = [
+  'https://pet-care-mauve-pi.vercel.app',
+  'https://pet-care-deploy-system.vercel.app',
+  'https://pet-care-deploy-system.onrender.com',
+  'http://localhost:3000'
+];
+const allowedOrigins = new Set([...defaultAllowed, ...frontendUrls]);
+
 app.use(cors({
-  origin: [
-    'https://pet-care-mauve-pi.vercel.app',
-    'https://pet-care-deploy-system.vercel.app',
-    'https://pet-care-deploy-system.onrender.com',
-    'http://localhost:3000'
-  ],
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like server-to-server or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    console.warn('CORS: blocked origin', origin);
+    return callback(new Error('CORS policy: Origin not allowed'));
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 app.use(express.static('views'));
 app.use('/uploads', express.static('uploads'));

@@ -126,8 +126,12 @@ exports.googleAuth = (req, res) => {
 
 
 const redirectWithError = (res, errorMessage) => {
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-  res.redirect(`${frontendUrl}/auth/callback?error=${encodeURIComponent(errorMessage)}`);
+  // Prefer explicit FRONTEND_URL; fall back to the first entry in FRONTEND_URLS if present
+  const frontendUrl = process.env.FRONTEND_URL
+    || (process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',')[0].trim() : null)
+    || 'http://localhost:3000';
+
+  res.redirect(`${frontendUrl.replace(/\/$/, '')}/auth/callback?error=${encodeURIComponent(errorMessage)}`);
 };
 
 

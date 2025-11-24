@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './profile.css';
 import profile from '../assets/dp.png';
 import notify from '../assets/notif.png';
@@ -12,18 +12,14 @@ import AppointmentSection from './UserAppointment';
 import Notification from './Notification';
 import { getUserNotifications } from '../api/notificationApi';
 import BillingSection from './BillingSection';
-
-function UserDashboard() {
-  console.log('UserPet import fixed - profile loading');
-  const user = getUser();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [notification, setNotification] = useState(null);
-  const [notifications, setNotifications] = useState([]);
-  const [showNotificationPanel, setShowNotificationPanel] = useState(false);
-  const [notificationLoading, setNotificationLoading] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editFormData, setEditFormData] = useState({
-    first_name: '',
+              <div 
+                className="profile-avatar" 
+                style={{ 
+                  backgroundImage: `url(${avatarUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }} 
+              ></div>
     last_name: '',
     email: '',
     phone_number: '',
@@ -187,6 +183,15 @@ function UserDashboard() {
     }
   };
 
+  // Build a safe avatar URL: if server returns a full URL use it; otherwise prefix with API base
+  const avatarUrl = currentUser?.profile_picture
+    ? (
+        currentUser.profile_picture.startsWith('http')
+          ? currentUser.profile_picture
+          : `${(import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')}${currentUser.profile_picture}`
+      )
+    : profile;
+
   return (
     <div className="app">
       {notification && (
@@ -209,10 +214,10 @@ function UserDashboard() {
           </div>
 
           <nav className="desktop-nav">
-            <a href="./UserDashboard" className="nav-link">Home</a>
-            <a href="./UserDashboard" className="nav-link">Services</a>
-            <a href="./UserDashboard" className="nav-link">Appointment</a>
-            <a href="./UserDashboard" className="nav-link">About</a>
+            <Link to="/UserDashboard" className="nav-link">Home</Link>
+            <Link to="/UserDashboard" className="nav-link">Services</Link>
+            <Link to="/UserDashboard" className="nav-link">Appointment</Link>
+            <Link to="/UserDashboard" className="nav-link">About</Link>
           </nav>
 
           <div className="profile" style={{ position: 'relative' }}>
@@ -258,10 +263,10 @@ function UserDashboard() {
 
         {isMenuOpen && (
           <div className="mobile-menu">
-            <a href="#home" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Home</a>
-            <a href="#about" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>About</a>
-            <a href="#services" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
-            <a href="#contact" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
+            <Link to="/UserDashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/UserDashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>About</Link>
+            <Link to="/UserDashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Services</Link>
+            <Link to="/UserDashboard" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Contact</Link>
             <div className="prof" onClick={() => navigate('/profile')} style={{ backgroundImage: `url(${profile})` }}></div>
           </div>
         )}
@@ -275,14 +280,14 @@ function UserDashboard() {
           <div className="profile-card">
             <div className="profile-header">
               <div 
-                className="profile-avatar" 
-                style={{ 
-                  backgroundImage: currentUser?.profile_picture 
-                    ? `url(${import.meta.env.VITE_API_BASE_URL || 'https://pet-management-backend.onrender.com'}${currentUser.profile_picture})` 
+                className="profile-avatar"
+                style={{
+                  backgroundImage: currentUser?.profile_picture
+                    ? `url(${currentUser.profile_picture})`
                     : `url(${profile})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
-                }} 
+                }}
               ></div>
               <div className="profile-info">
                 <h2>{currentUser?.first_name} {currentUser?.last_name}</h2>

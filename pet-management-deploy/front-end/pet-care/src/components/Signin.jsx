@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Signin.css";
 import LightRays from "./LightRays";
 import { registerUser, getGoogleAuthUrl } from "../api/authApi";
@@ -222,9 +222,7 @@ export default function Signin() {
           <div className="form-footer">
             <p>
               Already have an account?{" "}
-              <a href="/Login" className="link">
-                Login
-              </a>
+              <Link to="/login" className="link">Login</Link>
             </p>
           </div>
         </div>

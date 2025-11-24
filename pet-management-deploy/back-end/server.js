@@ -6,28 +6,31 @@ require('./config/schemaMigrations');
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
-// Configure CORS origins from environment variable `FRONTEND_URLS` (comma-separated)
+// Build allowed origins from env (FRONTEND_URLS) plus safe defaults.
 const frontendUrlsEnv = process.env.FRONTEND_URLS || '';
 const frontendUrls = frontendUrlsEnv.split(',').map(u => u.trim()).filter(Boolean);
-const defaultAllowed = [
+const defaultOrigins = [
   'https://pet-care-mauve-pi.vercel.app',
   'https://pet-care-deploy-system.vercel.app',
   'https://pet-care-deploy-system.onrender.com',
   'http://localhost:3000'
 ];
-const allowedOrigins = new Set([...defaultAllowed, ...frontendUrls]);
+const allowedOrigins = Array.from(new Set([...frontendUrls, ...defaultOrigins]));
 
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like server-to-server or curl)
+  origin: function (origin, callback) {
+    // Allow non-browser requests (Postman, curl) which have no origin
     if (!origin) return callback(null, true);
-    if (allowedOrigins.has(origin)) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
     console.warn('CORS: blocked origin', origin);
-    return callback(new Error('CORS policy: Origin not allowed'));
+    return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   optionsSuccessStatus: 200
 }));
+
+// Ensure OPTIONS preflight requests are handled
+app.options('*', cors());
 app.use(express.static('views'));
 app.use('/uploads', express.static('uploads'));
 const authRoutes = require('./routes/authRoutes');

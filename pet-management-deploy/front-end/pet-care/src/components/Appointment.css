@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Aoboshi+One&family=Antic+Slab&family=Montagu+Slab:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+.appointment-page {
+  font-family: 'Poppins', sans-serif;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.appointment-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+
+.appointment-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.appointment-box {
+  background: #fff;
+  display: flex;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 1100px;
+  max-width: 95%;
+  max-height: 90vh;
+  position: relative;
+}
+
+.close-appointment {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #6c757d;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.close-appointment:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+
+
+.right-panel {
+  background: #e1eafc;
+  flex: 1;
+  text-align: center;
+  padding: 2rem;
+  border-left: 2px solid #e0e0e0;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #1e3a8a;
+}
+
+.right-panel h2 {
+  color: #1e3a8a;
+  font-weight: 700;
+  margin-top: 1rem;
+  font-family: 'Montagu Slab', serif;
+}
+
+.right-panel p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 0.5rem;
+  margin-bottom: 40px;
+
+}
+
+.contact-info {
+  color: #1e3a8a;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+/* Steps */
+.steps-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 5rem;
+  display: flex;
+  gap: 8px;
+}
+
+.step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #1e3a8a;
+  color: #1e3a8a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.step-circle.active {
+  background: #1e3a8a;
+  color: white;
+}
+
+
+.pet-section {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.pet-section-header {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.pet-selection-list {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.birthdate{
+  margin-left: 30px;
+}
+
+.pet-selection-list label {
+  display: block;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+}
+
+.pet-selection-list label:hover {
+  background: #e9ecef;
+}
+
+.new-pet-form {
+  margin-top: 16px;
+}
+
+.new-pet-form .input-group {
+  margin-bottom: 16px;
+}
+
+.new-pet-form input,
+.new-pet-form select,
+.new-pet-form textarea {
+  margin-bottom: 12px;
+}
+
+.pet-added-list {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.pet-added-list > div {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #f8f9fa;
+}
+
+/* Form */
+.form-panel {
+  flex: 2;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.form-panel h3 {
+  color: #1e3a8a;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  font-family: 'Aoboshi One', serif;
+}
+
+.input-group {
+  display: flex;
+  gap: 1rem;
+}
+.review-list{
+  list-style: none;
+  padding-left: 50px;
+  text-align: left;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.appointment-page input:focus,
+.appointment-page textarea:focus,
+.appointment-page select:focus {
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+}
+
+.appointment-page textarea {
+  resize: none;
+  height: 80px;
+}
+
+.service-option label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fafc;
+  border: 1px solid #ddd;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.service-option input {
+  margin-right: 0.8rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.appointment-page button {
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.2s;
+}
+
+.next-btn,
+.finish-btn {
+  background: #1e3a8a;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 18px;
+}
+
+.next-btn:hover,
+.finish-btn:hover {
+  background: #2b50c7;
+}
+
+.back-btn {
+  background: #d1d5db;
+  color: #333;
+  padding: 0.8rem 1.5rem;
+   border-radius: 18px;
+}
+
+.back-btn:hover {
+  background: #bfc5cc;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

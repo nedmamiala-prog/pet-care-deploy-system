@@ -1,0 +1,1 @@
+{"buildCommand": "cd front-end/pet-care && npm install && npm run build", "outputDirectory": "front-end/pet-care/dist", "framework": "vite", "rewrites": [{"source": "/(.*)", "destination": "/index.html"}]}

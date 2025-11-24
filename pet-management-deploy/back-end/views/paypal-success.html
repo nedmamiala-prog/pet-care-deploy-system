@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PayPal Success</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      width: 380px;
+      max-width: 90%;
+    }
+
+    h2 {
+      color: #2ecc71;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    #status {
+      font-size: 16px;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    /* Loading spinner */
+    .loader {
+      margin: 20px auto;
+      border: 6px solid #eee;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Success checkmark */
+    .checkmark {
+      display: none;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 5px solid #2ecc71;
+      margin: 20px auto;
+      position: relative;
+      animation: pop 0.3s ease-out forwards;
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 10px;
+      width: 22px;
+      height: 45px;
+      border-right: 5px solid #2ecc71;
+      border-bottom: 5px solid #2ecc71;
+      transform: rotate(45deg);
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Error */
+    .error {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Processing Payment...</h2>
+    <div class="loader" id="loader"></div>
+    <div class="checkmark" id="checkmark"></div>
+    <div id="status">Please wait while we confirm your payment.</div>
+  </div>
+
+  <script>
+    async function run() {
+      const params = new URLSearchParams(window.location.search);
+      let orderID = params.get('token') || params.get('orderID') || null;
+
+      try {
+        if (!orderID) orderID = localStorage.getItem('paypal_last_order');
+      } catch (e) {}
+
+      if (!orderID) {
+        document.getElementById('status').innerText = 'Missing order ID in return URL.';
+        return;
+      }
+
+      let billingId = null;
+      try {
+        billingId = localStorage.getItem('paypal_billing_id');
+      } catch (e) {}
+
+      try {
+        const captureBody = { orderID };
+        if (billingId) captureBody.billingId = billingId; 
+        
+        const res = await fetch('https://pet-management-backend.onrender.com/api/payment/capture-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(captureBody)
+        });
+
+        const jsonText = await res.text();
+        let json = null;
+        try { json = jsonText ? JSON.parse(jsonText) : null; } catch (e) { json = { raw: jsonText }; }
+
+        if (res.ok) {
+          // Hide spinner
+          document.getElementById('loader').style.display = 'none';
+
+          // Show checkmark
+          document.getElementById('checkmark').style.display = 'block';
+
+          document.getElementById('status').innerText =
+            'Payment completed successfully. You may close this window.';
+
+          // Notify opener window
+          try {
+            if (window.opener && !window.opener.closed) {
+              window.opener.postMessage({ type: 'paypal-payment-complete', orderID }, '*');
+            }
+          } catch (e) {}
+        } else {
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('status').innerHTML =
+            '<span class="error">Payment capture failed:</span> ' + (json.error || JSON.stringify(json));
+        }
+      } catch (err) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('status').innerHTML =
+          '<span class="error">Network error:</span> ' + err.message;
+      }
+    }
+
+    run();
+  </script>
+</body>
+</html>

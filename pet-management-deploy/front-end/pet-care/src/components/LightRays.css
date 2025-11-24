@@ -1,0 +1,7 @@
+.light-rays-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 100;
+  pointer-events: none;
+}

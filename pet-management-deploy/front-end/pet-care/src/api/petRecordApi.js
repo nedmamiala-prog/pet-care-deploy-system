@@ -1,4 +1,5 @@
-const BASE_URL = 'https://pet-care-deploy-system.onrender.com/pet-records';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://pet-care-deploy-system.onrender.com';
+const BASE_URL = API_BASE.replace(/\/$/, '') + '/pet-records';
 
 export async function createPetRecord(recordData) {
   try {

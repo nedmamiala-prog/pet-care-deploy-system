@@ -1,5 +1,6 @@
-const BASE_URL = 'https://pet-care-deploy-system.onrender.com/billing';
-const PAYMENT_BASE_URL = 'https://pet-care-deploy-system.onrender.com/api/payment';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://pet-care-deploy-system.onrender.com';
+const BASE_URL = API_BASE.replace(/\/$/, '') + '/billing';
+const PAYMENT_BASE_URL = API_BASE.replace(/\/$/, '') + '/api/payment';
 
 const buildHeaders = () => {
   const token = localStorage.getItem('token');

@@ -1,4 +1,5 @@
-const BASE_URL = 'https://pet-care-deploy-system.onrender.com/dashboard';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://pet-care-deploy-system.onrender.com';
+const BASE_URL = API_BASE.replace(/\/$/, '') + '/dashboard';
 
 export async function getDashboardStats() {
   try {

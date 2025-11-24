@@ -1,4 +1,5 @@
-const BASE_URL = 'https://pet-care-deploy-system.onrender.com/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://pet-care-deploy-system.onrender.com';
+const BASE_URL = API_BASE.replace(/\/$/, '') + '/api';
 
 export async function updateUserProfile(profileData) {
   try {

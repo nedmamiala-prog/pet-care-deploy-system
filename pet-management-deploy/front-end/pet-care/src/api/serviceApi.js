@@ -1,4 +1,4 @@
-const BASE_URL = 'https://pet-management-backend.onrender.com/services';
+const BASE_URL = 'https://pet-care-deploy-system.onrender.com/services';
 
 
 export async function getAllServices() {

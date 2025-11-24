@@ -1,4 +1,4 @@
-const BASE_URL = 'https://pet-management-backend.onrender.com/pets';
+const BASE_URL = 'https://pet-care-deploy-system.onrender.com/pets';
 
 export async function updatePetProfilePicture(petId, file) {
   try {

@@ -1,5 +1,5 @@
-const BASE_URL = 'https://pet-management-backend.onrender.com/billing';
-const PAYMENT_BASE_URL = 'https://pet-management-backend.onrender.com/api/payment';
+const BASE_URL = 'https://pet-care-deploy-system.onrender.com/billing';
+const PAYMENT_BASE_URL = 'https://pet-care-deploy-system.onrender.com/api/payment';
 
 const buildHeaders = () => {
   const token = localStorage.getItem('token');

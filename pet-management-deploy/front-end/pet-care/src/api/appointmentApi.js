@@ -1,4 +1,4 @@
-const BASE_URL = 'https://pet-management-backend.onrender.com/appointments';
+const BASE_URL = 'https://pet-care-deploy-system.onrender.com/appointments';
 
 
 export async function createAppointment({ pet_id, date, time, service, notes }) {

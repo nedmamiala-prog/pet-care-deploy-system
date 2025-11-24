@@ -6,38 +6,51 @@ const axios = require('axios');
 
 exports.register = (req, res) => {
   const { first_name, last_name, username, email, password, phone_number } = req.body;
+  // Basic server-side validation
+  if (!first_name || !last_name || !username || !email || !password) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
 
- 
-  User.findByUsername(username, (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error", error: err });
-    if (results.length > 0) return res.status(400).json({ message: "Username must be unique" });
+  // Check username uniqueness
+  User.findByUsername(username, (err, usernameResults) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (usernameResults.length > 0) return res.status(400).json({ message: 'Username already taken' });
 
-    
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    // Check email uniqueness
+    User.findByEmail(email, (err2, emailResults) => {
+      if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+      if (emailResults.length > 0) return res.status(400).json({ message: 'Email already registered' });
 
-   
-    User.create(first_name, last_name, username, email, hashedPassword, phone_number, (err, result) => {
-      if (err) return res.status(500).json({ message: "Error creating user", error: err });
+      const hashedPassword = bcrypt.hashSync(password, 10);
 
-      
-      const token = jwt.sign(
-        { id: result.insertId, role: 'user' },
-        process.env.JWT_SECRET || "secret",
-        { expiresIn: '24h' }
-      );
-
-      res.json({
-        message: "Registration successful",
-        token,
-        role: 'user',
-        user: {
-          id: result.insertId,
-          first_name,
-          last_name,
-          username,
-          email,
-          phone_number
+      User.create(first_name, last_name, username, email, hashedPassword, phone_number, (err3, result) => {
+        if (err3) {
+          // Handle duplicate entry more gracefully
+          if (err3.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: 'Username or email already exists' });
+          }
+          return res.status(500).json({ message: 'Error creating user', error: err3 });
         }
+
+        const token = jwt.sign(
+          { id: result.insertId, role: 'user' },
+          process.env.JWT_SECRET || 'secret',
+          { expiresIn: '24h' }
+        );
+
+        res.json({
+          message: 'Registration successful',
+          token,
+          role: 'user',
+          user: {
+            id: result.insertId,
+            first_name,
+            last_name,
+            username,
+            email,
+            phone_number
+          }
+        });
       });
     });
   });

@@ -3,11 +3,11 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-plugins: [react()],
+  plugins: [react()],
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://pet-care-deploy-system.onrender.com',
         changeOrigin: true,
         secure: false,
       },

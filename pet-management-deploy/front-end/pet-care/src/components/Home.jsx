@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Home.css';
 import heroBg from '../assets/coverphoto.jpg';
 import car from '../assets/ca.png';
@@ -10,6 +10,8 @@ function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === '/' || location.pathname === '';
 
 
   useEffect(() => {
@@ -66,8 +68,12 @@ function Home() {
           </nav>
 
 
-          <button className="login-button" onClick={() => navigate('/login')}>Login</button>
-          <button className="login-button" onClick={() => navigate('/signin')} style={{ marginLeft: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
+          {!isHome && (
+            <>
+              <button className="login-button" onClick={() => navigate('/login')}>Login</button>
+              <button className="login-button" onClick={() => navigate('/signin')} style={{ marginLeft: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
+            </>
+          )}
 
 
           <button className="mobile-menu-btn" onClick={toggleMenu}>
@@ -82,8 +88,12 @@ function Home() {
             <a href="#about" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>About</a>
             <a href="#services" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
             <a href="#contact" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
-            <button className="mobile-login-btn" onClick={() => navigate('/login')}>Login</button>
-            <button className="mobile-login-btn" onClick={() => navigate('/signin')} style={{ marginTop: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
+            {!isHome && (
+              <>
+                <button className="mobile-login-btn" onClick={() => navigate('/login')}>Login</button>
+                <button className="mobile-login-btn" onClick={() => navigate('/signin')} style={{ marginTop: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
+              </>
+            )}
           </div>
         )}
       </header>

@@ -122,7 +122,7 @@
         const captureBody = { orderID };
         if (billingId) captureBody.billingId = billingId; 
         
-        const res = await fetch('https://pet-management-backend.onrender.com/api/payment/capture-order', {
+        const res = await fetch('https://pet-care-deploy-system.onrender.com/api/payment/capture-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(captureBody)

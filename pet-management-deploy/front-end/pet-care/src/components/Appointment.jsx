@@ -257,9 +257,7 @@ useEffect(() => {
     return time;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     // Validate that we have at least one pet selected
     const allPetIds = [...selectedPetIds, ...newPets.map(p => `new-${p.tempId}`)];
     if (allPetIds.length === 0) {
@@ -434,15 +432,10 @@ useEffect(() => {
  
         <form className="form-panel" onSubmit={(e) => {
           e.preventDefault();
-          // Only submit if we're on step 4 and the submit button was clicked
-          if (step === 4) {
-            handleSubmit(e);
-          }
+          return;
         }} onKeyDown={(e) => {
-          // Prevent form submission on Enter key except for submit button
           if (e.key === 'Enter' && e.target.type !== 'textarea' && e.target.type !== 'submit' && e.target.type !== 'button') {
             e.preventDefault();
-            // Move to next step if not on last step
             if (step < 4) {
               handleNext();
             }
@@ -916,7 +909,7 @@ useEffect(() => {
                 Next Step →
               </button>
             ) : (
-              <button type="submit" className="finish-btn">
+              <button type="button" onClick={handleSubmit} className="finish-btn">
                 Submit Appointment ✔
               </button>
             )}

@@ -14,6 +14,8 @@ function PetProfile() {
   const [loading, setLoading] = useState(true);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Calculate age from birthdate
   const calculateAge = (birthdate) => {
@@ -115,12 +117,14 @@ function PetProfile() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        alert('Image size must be less than 5MB');
+        setErrorMessage('Image size must be less than 5MB');
+        setTimeout(() => setErrorMessage(''), 3000);
         return;
       }
       
       if (!file.type.startsWith('image/')) {
-        alert('Only image files are allowed');
+        setErrorMessage('Only image files are allowed');
+        setTimeout(() => setErrorMessage(''), 3000);
         return;
       }
       
@@ -148,13 +152,16 @@ function PetProfile() {
           )
         );
         closeEditPictureModal();
-        alert('Pet profile picture updated successfully!');
+        setSuccessMessage('Pet profile picture updated successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
       } else {
-        alert(response.message || 'Failed to update pet profile picture');
+        setErrorMessage(response.message || 'Failed to update pet profile picture');
+        setTimeout(() => setErrorMessage(''), 3000);
       }
     } catch (error) {
       console.error('Error updating pet profile picture:', error);
-      alert('Failed to update pet profile picture. Please try again.');
+      setErrorMessage('Failed to update pet profile picture. Please try again.');
+      setTimeout(() => setErrorMessage(''), 3000);
     }
   };
 
@@ -166,6 +173,41 @@ function PetProfile() {
 
   return (
     <div className="pet-profile-container">
+      {/* Error and Success Messages */}
+      {errorMessage && (
+        <div className="message error-message" style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          backgroundColor: '#fee2e2',
+          color: '#b91c1c',
+          padding: '12px 16px',
+          borderRadius: '6px',
+          border: '1px solid #fecaca',
+          zIndex: 1000,
+          maxWidth: '300px'
+        }}>
+          {errorMessage}
+        </div>
+      )}
+      
+      {successMessage && (
+        <div className="message success-message" style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          backgroundColor: '#dcfce7',
+          color: '#166534',
+          padding: '12px 16px',
+          borderRadius: '6px',
+          border: '1px solid #bbf7d0',
+          zIndex: 1000,
+          maxWidth: '300px'
+        }}>
+          {successMessage}
+        </div>
+      )}
+
       <div className="pet-profile-header">
         <button
           onClick={handleBackToProfile}

@@ -67,6 +67,7 @@ function Home() {
 
 
           <button className="login-button" onClick={() => navigate('/login')}>Login</button>
+          <button className="login-button" onClick={() => navigate('/signin')} style={{ marginLeft: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
 
 
           <button className="mobile-menu-btn" onClick={toggleMenu}>
@@ -82,6 +83,7 @@ function Home() {
             <a href="#services" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
             <a href="#contact" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
             <button className="mobile-login-btn" onClick={() => navigate('/login')}>Login</button>
+            <button className="mobile-login-btn" onClick={() => navigate('/signin')} style={{ marginTop: '10px', backgroundColor: '#8b5cf6' }}>Sign Up</button>
           </div>
         )}
       </header>
@@ -99,9 +101,10 @@ function Home() {
             <p className={`hero-subtitle ${isVisible ? 'animate-in delay-1' : ''}`}>
               Because Every Paw Deserves Perfect Care
             </p>
-            <button className={`cta-btn ${isVisible ? 'animate-in delay-2' : ''}`} onClick={() => navigate('/login')}>
-              Let’s get started!
-            </button>
+            <div className={`cta-btn ${isVisible ? 'animate-in delay-2' : ''}`} style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+              <button onClick={() => navigate('/login')} style={{ padding: '1.25rem 3rem', fontSize: '1.2rem', fontWeight: '700', borderRadius: '50px', cursor: 'pointer', transition: 'all 0.3s ease', backgroundColor: '#3b82f6', color: 'white', border: 'none', boxShadow: '0 8px 25px rgba(59, 130, 246, 0.3)' }}>Login</button>
+              <button onClick={() => navigate('/signin')} style={{ padding: '1.25rem 3rem', fontSize: '1.2rem', fontWeight: '700', borderRadius: '50px', cursor: 'pointer', transition: 'all 0.3s ease', backgroundColor: '#8b5cf6', color: 'white', border: 'none', boxShadow: '0 8px 25px rgba(139, 92, 246, 0.3)' }}>Sign Up</button>
+            </div>
           </div>
         </div>
       </section>

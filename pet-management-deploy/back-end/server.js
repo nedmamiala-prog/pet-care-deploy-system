@@ -46,6 +46,47 @@ app.use('/analytics', analyticsRoutes);
 
 app.use("/api/payment", require("./routes/paymentRoutes"));
 
+// Test email notification endpoint
+app.post('/test-email', async (req, res) => {
+  const { to, subject, message } = req.body;
+  
+  if (!to || !message) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Email (to) and message are required' 
+    });
+  }
+
+  try {
+    const { sendEmail, isConfigured } = require('./services/emailService');
+    
+    if (!isConfigured) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Email service not configured. Check EMAIL_USER and EMAIL_PASS environment variables.' 
+      });
+    }
+
+    await sendEmail({ 
+      to, 
+      subject: subject || 'PetCare Test Notification', 
+      text: message 
+    });
+
+    res.json({ 
+      success: true, 
+      message: 'Test email sent successfully!' 
+    });
+  } catch (error) {
+    console.error('Test email error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send test email', 
+      error: error.message 
+    });
+  }
+});
+
 // Test database connection endpoint
 app.get('/test-db', (req, res) => {
   db.query('SELECT NOW() AS currentTime, DATABASE() AS currentDatabase', (err, result) => {

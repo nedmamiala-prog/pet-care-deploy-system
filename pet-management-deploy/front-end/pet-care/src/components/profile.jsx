@@ -12,14 +12,18 @@ import AppointmentSection from './UserAppointment';
 import Notification from './Notification';
 import { getUserNotifications } from '../api/notificationApi';
 import BillingSection from './BillingSection';
-              <div 
-                className="profile-avatar" 
-                style={{ 
-                  backgroundImage: `url(${avatarUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }} 
-              ></div>
+
+function UserDashboard() {
+  console.log('UserPet import fixed - profile loading');
+  const user = getUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotificationPanel, setShowNotificationPanel] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    first_name: '',
     last_name: '',
     email: '',
     phone_number: '',

@@ -129,6 +129,58 @@ app.get('/test-db', (req, res) => {
   });
 });
 
+// Reset admin password endpoint
+app.post('/reset-admin-password', (req, res) => {
+  const bcrypt = require('bcryptjs');
+  const username = 'admin_den';
+  const plainPassword = 'admin123';
+  const hashedPassword = bcrypt.hashSync(plainPassword, 10);
+
+  db.query(
+    'UPDATE admin SET password = ? WHERE username = ?',
+    [hashedPassword, username],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ 
+          success: false, 
+          error: err.message,
+          details: 'Failed to update admin password'
+        });
+      }
+      
+      if (result.affectedRows === 0) {
+        // Admin doesn't exist, create it
+        db.query(
+          'INSERT INTO admin (username, password) VALUES (?, ?)',
+          [username, hashedPassword],
+          (err, result) => {
+            if (err) {
+              return res.status(500).json({ 
+                success: false, 
+                error: err.message,
+                details: 'Failed to create admin'
+              });
+            }
+            res.json({ 
+              success: true, 
+              message: 'Admin user created successfully!',
+              username: username,
+              password: plainPassword
+            });
+          }
+        );
+      } else {
+        res.json({ 
+          success: true, 
+          message: 'Admin password updated successfully!',
+          username: username,
+          password: plainPassword
+        });
+      }
+    }
+  );
+});
+
 // Serve PayPal pages
 app.get('/paypal-success.html', (req, res) => {
   res.sendFile(__dirname + '/views/paypal-success.html');

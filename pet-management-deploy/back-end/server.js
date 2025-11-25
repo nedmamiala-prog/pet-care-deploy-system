@@ -29,8 +29,8 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-// Ensure OPTIONS preflight requests are handled
-app.options('*', cors());
+// Ensure OPTIONS preflight requests are handled for all routes
+app.use(cors());
 app.use(express.static('views'));
 app.use('/uploads', express.static('uploads'));
 const authRoutes = require('./routes/authRoutes');

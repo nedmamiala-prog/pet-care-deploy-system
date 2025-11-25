@@ -12,6 +12,7 @@ const frontendUrls = frontendUrlsEnv.split(',').map(u => u.trim()).filter(Boolea
 const defaultOrigins = [
   'https://pet-care-mauve-pi.vercel.app',
   'https://pet-care-deploy-system.vercel.app',
+  'https://pet-care-deploy-system-lb2rew7lt-pet-cares-projects-db74b789.vercel.app',
   'https://pet-care-deploy-system.onrender.com',
   'http://localhost:3000'
 ];

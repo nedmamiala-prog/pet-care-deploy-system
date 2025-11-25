@@ -3,7 +3,7 @@
   "outputDirectory": "front-end/pet-care/dist", 
   "framework": "vite",
   "rewrites": [
-    {"source": "/((?!api/).*)", "destination": "/index.html"}
+    {"source": "/((?!api|_next/static|_next/image|assets).*)", "destination": "/index.html"}
   ],
   "cleanUrls": true,
   "trailingSlash": false

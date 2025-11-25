@@ -214,6 +214,36 @@ app.post('/debug-admin', (req, res) => {
   });
 });
 
+// Check database data for analytics
+app.get('/check-data', (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as count FROM appointment',
+    'SELECT COUNT(*) as count FROM service', 
+    'SELECT COUNT(*) as count FROM billing',
+    'SELECT COUNT(*) as count FROM user',
+    'SELECT COUNT(*) as count FROM admin'
+  ];
+  
+  let completed = 0;
+  const results = {};
+  
+  queries.forEach((query, index) => {
+    const table = ['appointment', 'service', 'billing', 'user', 'admin'][index];
+    db.query(query, (err, result) => {
+      if (err) {
+        results[table] = 'Error: ' + err.message;
+      } else {
+        results[table] = result[0].count;
+      }
+      
+      completed++;
+      if (completed === queries.length) {
+        res.json(results);
+      }
+    });
+  });
+});
+
 // Serve PayPal pages
 app.get('/paypal-success.html', (req, res) => {
   res.sendFile(__dirname + '/views/paypal-success.html');
@@ -228,3 +258,5 @@ app.listen(5000, () => {
   console.log('CORS fixed for Vercel domain');
   startNotificationScheduler();
 });
+
+

@@ -244,6 +244,36 @@ app.get('/check-data', (req, res) => {
   });
 });
 
+// Debug analytics queries
+app.get('/debug-analytics', (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM appointment WHERE date_time >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)',
+    'SELECT AVG(s.duration_minutes) AS avg_duration FROM appointment a LEFT JOIN service s ON a.service_id = s.service_id WHERE a.date_time >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)',
+    'SELECT service, COUNT(*) as count FROM appointment GROUP BY service LIMIT 5',
+    'SELECT * FROM service LIMIT 3',
+    'SELECT appointment_id, service, service_id FROM appointment LIMIT 3'
+  ];
+  
+  let completed = 0;
+  const results = {};
+  
+  queries.forEach((query, index) => {
+    const name = ['current_appointments', 'avg_duration_join', 'service_names', 'service_table', 'appointment_table'][index];
+    db.query(query, (err, result) => {
+      if (err) {
+        results[name] = 'Error: ' + err.message;
+      } else {
+        results[name] = result;
+      }
+      
+      completed++;
+      if (completed === queries.length) {
+        res.json(results);
+      }
+    });
+  });
+});
+
 // Serve PayPal pages
 app.get('/paypal-success.html', (req, res) => {
   res.sendFile(__dirname + '/views/paypal-success.html');

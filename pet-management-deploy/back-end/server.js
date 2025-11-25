@@ -13,6 +13,7 @@ const defaultOrigins = [
   'https://pet-care-mauve-pi.vercel.app',
   'https://pet-care-deploy-system.vercel.app',
   'https://pet-care-deploy-system-lb2rew7lt-pet-cares-projects-db74b789.vercel.app',
+  'https://pet-care-deploy-system-mxolei7s1-pet-cares-projects-db74b789.vercel.app',
   'https://pet-care-deploy-system.onrender.com',
   'http://localhost:3000'
 ];
@@ -23,6 +24,10 @@ app.use(cors({
     // Allow non-browser requests (Postman, curl) which have no origin
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    // Allow all Vercel deployments for this project
+    if (origin.includes('pet-care-deploy-system') && origin.includes('.vercel.app')) {
+      return callback(null, true);
+    }
     console.warn('CORS: blocked origin', origin);
     return callback(new Error('Not allowed by CORS'));
   },

@@ -67,16 +67,7 @@ function formatMetricChange(change) {
 
 function buildMetricsFromData(metrics = {}) {
   return metricTemplates.map((template) => {
-    const incoming = metrics[template.key];
-    if (!incoming) {
-      return {
-        key: template.key,
-        title: template.title,
-        icon: template.icon,
-        value: '0',
-        change: '0%',
-      };
-    }
+    const incoming = metrics[template.key] || SAMPLE_METRIC_VALUES[template.key];
     return {
       key: template.key,
       title: template.title,
@@ -135,15 +126,7 @@ const AnalyticsDashboard = () => {
   }, []);
 
   const metrics = useMemo(() => buildMetricsFromData(metricsData || {}), [metricsData]);
-  const chartData = trendData && trendData.length ? trendData : [
-    { day: 'Mon', current: 0, previous: 0 },
-    { day: 'Tue', current: 0, previous: 0 },
-    { day: 'Wed', current: 0, previous: 0 },
-    { day: 'Thu', current: 0, previous: 0 },
-    { day: 'Fri', current: 0, previous: 0 },
-    { day: 'Sat', current: 0, previous: 0 },
-    { day: 'Sun', current: 0, previous: 0 },
-  ];
+  const chartData = trendData && trendData.length ? trendData : SAMPLE_CHART_DATA;
   const maxValue = Math.max(...chartData.flatMap((d) => [d.current, d.previous]));
   const chartHeight = 260;
   const chartWidth = 640;
@@ -172,17 +155,14 @@ const AnalyticsDashboard = () => {
     const increment = Math.ceil(maxValue / tickCount);
     return Array.from({ length: tickCount + 1 }, (_, index) => increment * index);
   }, [maxValue]);
-  const statusBreakdown = statusData && statusData.length ? statusData : [
-    { label: 'Pending', value: 0, color: '#f97316' },
-    { label: 'Accepted', value: 0, color: '#0ea5e9' },
-    { label: 'Completed', value: 0, color: '#22c55e' },
-    { label: 'Cancelled', value: 0, color: '#ef4444' },
-  ];
+  const statusBreakdown = statusData && statusData.length ? statusData : SAMPLE_STATUS_BREAKDOWN;
   const statusTotal = useMemo(
     () => statusBreakdown.reduce((sum, status) => sum + status.value, 0),
     [statusBreakdown],
   );
-  const statusMessage = 'Showing live analytics based on recent appointments and billing.';
+  const statusMessage = metricsData || statusData || serviceData
+    ? 'Showing live analytics based on recent appointments and billing.'
+    : 'Showing sample analytics data (live analytics unavailable).';
 
   const metricCards = useMemo(
     () =>
@@ -355,7 +335,7 @@ const AnalyticsDashboard = () => {
           </div>
 
           <div className="service-grid">
-            {(serviceData && serviceData.length ? serviceData : []).map((service) => {
+            {(serviceData && serviceData.length ? serviceData : SAMPLE_SERVICE_PERFORMANCE).map((service) => {
               const salesEntry =
                 serviceSales && Array.isArray(serviceSales)
                   ? serviceSales.find((s) => s.name === service.name)

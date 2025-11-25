@@ -181,6 +181,39 @@ app.post('/reset-admin-password', (req, res) => {
   );
 });
 
+// Debug admin login endpoint
+app.post('/debug-admin', (req, res) => {
+  const { username, password } = req.body;
+  
+  db.query('SELECT * FROM admin WHERE username = ?', [username], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    
+    if (results.length === 0) {
+      return res.json({ 
+        message: 'Admin not found',
+        username: username,
+        adminCount: results.length
+      });
+    }
+    
+    const admin = results[0];
+    const bcrypt = require('bcryptjs');
+    const isMatch = bcrypt.compareSync(password, admin.password);
+    
+    res.json({
+      message: 'Admin found',
+      username: admin.username,
+      passwordHash: admin.password,
+      passwordLength: admin.password ? admin.password.length : 0,
+      providedPassword: password,
+      passwordMatch: isMatch,
+      hashStartsWith: admin.password ? admin.password.substring(0, 10) : 'null'
+    });
+  });
+});
+
 // Serve PayPal pages
 app.get('/paypal-success.html', (req, res) => {
   res.sendFile(__dirname + '/views/paypal-success.html');

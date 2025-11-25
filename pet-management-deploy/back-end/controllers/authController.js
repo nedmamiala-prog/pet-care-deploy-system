@@ -150,7 +150,8 @@ const redirectWithError = (res, errorMessage) => {
 
 exports.googleCallback = async (req, res) => {
   const { code, error } = req.query;
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  // Use same logic as redirectWithError: prefer FRONTEND_URL, fallback to FRONTEND_URLS[0], then localhost
+  const frontendUrl = (process.env.FRONTEND_URL || (process.env.FRONTEND_URLS ? process.env.FRONTEND_URLS.split(',')[0].trim() : null) || 'http://localhost:3000').replace(/\/$/, '');
 
 
   if (error) {
